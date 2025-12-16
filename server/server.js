@@ -1,11 +1,12 @@
 const WebSocket = require("ws");
 
-const wss = new WebSocket.Server({ port: 8080 });
+const PORT = process.env.PORT || 8080;
+const wss = new WebSocket.Server({ port: PORT });
+
 let clients = [];
 
 wss.on("connection", (ws) => {
   clients.push(ws);
-  console.log("Client connected");
 
   ws.on("message", (message) => {
     clients.forEach(client => {
@@ -16,11 +17,9 @@ wss.on("connection", (ws) => {
   });
 
   ws.on("close", () => {
-    clients = clients.filter(client => client !== ws);
-    console.log("Client disconnected");
+    clients = clients.filter(c => c !== ws);
   });
 });
 
-console.log("WebSocket server running on ws://localhost:8080");
+console.log("WebSocket server running");
 
-Add WebSocket server
